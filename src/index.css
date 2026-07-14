@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+	--font-lexend: "Lexend", sans-serif;
+	--color-background: rgba(247, 250, 252, 1);
+	--color-button: rgba(18, 92, 237, 1);
+	--color-button-alt: rgba(232, 235, 242, 1);
+	--color-header: rgba(229, 232, 235, 1);
+	--color-whitish-text: rgba(247, 250, 252, 1);
+	--color-secondary-text: rgba(77, 102, 153, 1);
+	--hero-img: url("./assets/img/hero.png");
+}
+
+@layer components {
+	.field {
+		@apply bg-amber-50;
+	}
+
+	.reason-card {
+		@apply flex flex-col gap-3 rounded-lg border p-4 min-w-75;
+	}
+}
+
+body {
+	@apply font-lexend bg-background;
+}
