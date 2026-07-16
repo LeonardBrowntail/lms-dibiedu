@@ -4,8 +4,8 @@
 @theme {
 	--font-lexend: "Lexend", sans-serif;
 	--color-background: rgba(247, 250, 252, 1);
-	--color-button: rgba(18, 92, 237, 1);
-	--color-button-alt: rgba(232, 235, 242, 1);
+	--color-button-default: rgba(18, 92, 237, 1);
+	--color-button-red: rgba(237, 138, 18, 1);
 	--color-header: rgba(229, 232, 235, 1);
 	--color-whitish-text: rgba(247, 250, 252, 1);
 	--color-secondary-text: rgba(77, 102, 153, 1);
@@ -19,6 +19,10 @@
 
 	.reason-card {
 		@apply flex flex-col gap-3 rounded-lg border p-4 min-w-75;
+	}
+
+	.button {
+		@apply h-10 px-4 rounded-lg text-whitish-text font-bold min-w-21 max-w-120;
 	}
 }
 

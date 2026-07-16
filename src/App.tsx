@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
@@ -11,7 +10,6 @@ import Dashboard from "./pages/Dashboard";
 export default function App() {
 	return (
 		<>
-			<Navbar />
 			<Routes>
 				<Route index element={<Home />} />
 				<Route path={routePaths.register} element={<Register />} />

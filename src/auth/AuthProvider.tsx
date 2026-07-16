@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
-import type { User } from "../types/UserObject";
-import { AuthContext } from "../hooks/useAuth";
+import type { User } from "../types/UserType";
+import { AuthContext, AuthContextObject } from "./AuthContext";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
 	const [user, setUser] = useState<User | null>(null);
@@ -42,5 +42,5 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
 	const values = new AuthContextObject(user, loading, login, logout, getToken);
 
-	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+	return <AuthContext value={values}>{children}</AuthContext>;
 }

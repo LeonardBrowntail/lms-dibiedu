@@ -1,11 +1,18 @@
-import ReasonCard from "../components/ReasonCards";
-import img1 from "../img/featured1.png";
-import img2 from "../img/featured2.png";
-import img3 from "../img/featured3.png";
+import Navbar from "../components/Navbar";
+import ReasonCard from "../components/ReasonCard";
 import { FiBookOpen, FiFileText } from "react-icons/fi";
 import { PiCertificate } from "react-icons/pi";
+import img1 from "../assets/img/featured1.png";
+import img2 from "../assets/img/featured2.png";
+import img3 from "../assets/img/featured3.png";
 
 export default function Home() {
+	const navbar = [
+		{ title: "Home", path: "#home" },
+		{ title: "Why Us", path: "#why-us" },
+		{ title: "Featured Courses", path: "#featured" },
+	];
+
 	const reasons = [
 		{
 			icon: <FiBookOpen height={24} width={24} />,
@@ -44,6 +51,7 @@ export default function Home() {
 
 	return (
 		<>
+			<Navbar navLinks={navbar} />
 			<div>
 				<main className="p-4 text-whitish-text">
 					<figure
@@ -61,12 +69,15 @@ export default function Home() {
 								anywhere.
 							</p>
 						</div>
-						<button className="button-">Start Learning</button>
+						<button className="button bg-button">Start Learning</button>
 					</figure>
 				</main>
 				<section className="px-4 py-10 flex flex-col gap-10">
 					<div>
-						<h2 className="font-black text-4xl/normal tracking-tight">
+						<h2
+							id="why-us"
+							className="font-black text-4xl/normal tracking-tight"
+						>
 							Why Choose EduLearn?
 						</h2>
 						<p>
@@ -89,7 +100,9 @@ export default function Home() {
 					</div>
 				</section>
 				<section className="p-4">
-					<h2 className="pt-5 pb-3 font-bold text-[22px]">Featured Courses</h2>
+					<h2 id="featured" className="pt-5 pb-3 font-bold text-[22px]">
+						Featured Courses
+					</h2>
 					<div className="flex gap-3 overflow-scroll md:overflow-visible">
 						{featured.map((feature, index) => {
 							return (
@@ -112,7 +125,7 @@ export default function Home() {
 					</div>
 				</section>
 				<div className="px-4 py-3 flex justify-center items-center">
-					<button>Learn More</button>
+					<button className="button bg-button">Learn More</button>
 				</div>
 			</div>
 		</>
