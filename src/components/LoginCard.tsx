@@ -1,48 +1,16 @@
-import { Navigate } from "react-router-dom";
-import { useState } from "react";
-import type { LoginFormErrorType } from "../types/LoginTypes";
-import apiRequest, { APIError } from "../api/client";
-import LoginForm from "../utils/LoginUtil";
-import routePaths from "../routePaths";
+import useApiPost from "../hooks/useApiPost";
+import useLoginSetup from "../hooks/useLoginSetup";
 
 export default function LoginCard() {
-	const [form, setForm] = useState(LoginForm.create());
-	const [errors, setErrors] = useState<LoginFormErrorType | null>(null);
-	const [serverError, setServerError] = useState("");
-	const [submitting, setSubmitting] = useState(false);
+	const setup = useLoginSetup();
+	const { form, errors, serverError, submitting, setForm, submit } =
+		useApiPost(setup);
 
-	function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
+	function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
 		setForm({
 			...form,
-			[event.target.name]: event.target.value,
+			[event.currentTarget.name]: event.currentTarget.value,
 		});
-	}
-
-	async function onSubmit(event: React.SubmitEvent) {
-		event.preventDefault();
-
-		// registration error handling
-		setServerError("");
-		setErrors(LoginForm.validate(form));
-		if (errors) return;
-
-		// fetch backend response
-		setSubmitting(true);
-		try {
-			const response = await apiRequest(
-				"/login",
-				"POST",
-				LoginForm.toJson(form),
-			);
-			if (response?.status) return <Navigate to={routePaths.dashboard} />;
-		} catch (error) {
-			if (error instanceof APIError) {
-				setServerError(error.message);
-				console.error(error.errors);
-			}
-		}
-
-		setSubmitting(false);
 	}
 
 	return (
@@ -51,7 +19,7 @@ export default function LoginCard() {
 
 			{serverError && <div className="alert-error">{serverError}</div>}
 
-			<form onSubmit={onSubmit} noValidate>
+			<form onSubmit={submit} noValidate>
 				<div className="field">
 					<label>Email</label>
 					<input
@@ -59,7 +27,7 @@ export default function LoginCard() {
 						name="email"
 						disabled={submitting}
 						value={form.email}
-						onChange={onChange}
+						onChange={handleChange}
 						placeholder="Email"
 						className={errors?.email ? "input-error" : ""}
 					/>
@@ -75,7 +43,7 @@ export default function LoginCard() {
 						name="password"
 						disabled={submitting}
 						value={form.password}
-						onChange={onChange}
+						onChange={handleChange}
 						placeholder="Password"
 						className={errors?.password ? "input-error" : ""}
 					/>

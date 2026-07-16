@@ -1,55 +1,20 @@
-import { useState } from "react";
-import apiRequest, { APIError } from "../api/client";
-import type { RegisterFormError } from "../types/RegisterTypes";
-import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import RegisterForm from "../utils/RegisterUtil";
+import { Link } from "react-router-dom";
+import useRegisterSetup from "../hooks/useRegisterSetup";
+import useApiPost from "../hooks/useApiPost";
 
 export default function Register() {
-	// early redirect to dashboard if user is already logged in
-	const navigate = useNavigate();
-	const { authenticated: isLoggedIn } = useAuth();
-	if (isLoggedIn) navigate("dashboard", { replace: true });
+	const { form, errors, serverError, submitting, setForm, submit } =
+		useApiPost(useRegisterSetup());
 
-	// register states
-	const [form, setForm] = useState(RegisterForm.create());
-	const [errors, setErrors] = useState<RegisterFormError | null>(null);
-	const [serverError, setServerError] = useState("");
-	const [submitting, setSubmitting] = useState(false);
-
-	function onInputChange(
-		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-	): void {
+	function handleInputChange(
+		event:
+			| React.ChangeEvent<HTMLInputElement>
+			| React.ChangeEvent<HTMLSelectElement>,
+	) {
 		setForm({
 			...form,
-			[event.target.name]: event.target.value,
+			[event.currentTarget.name]: event.currentTarget.value,
 		});
-	}
-
-	async function onSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-		event.preventDefault();
-
-		// registration error handling
-		setServerError("");
-		setErrors(RegisterForm.validate(form));
-		if (errors) return;
-
-		// fetch backend response
-		setSubmitting(true);
-		try {
-			const response = await apiRequest(
-				"register",
-				"POST",
-				RegisterForm.toJson(form),
-			);
-			if (response?.status) navigate("login");
-		} catch (error) {
-			if (error instanceof APIError) {
-				setServerError(error.message);
-				console.error(error.errors);
-			}
-		}
-		setSubmitting(false);
 	}
 
 	return (
@@ -59,14 +24,14 @@ export default function Register() {
 
 				{serverError && <div className="alert-error">{serverError}</div>}
 
-				<form onSubmit={onSubmit} noValidate>
+				<form onSubmit={submit} noValidate>
 					<div className="field">
 						<label>Nama</label>
 						<input
 							type="text"
 							name="name"
 							value={form.name}
-							onChange={onInputChange}
+							onChange={handleInputChange}
 							className={errors?.name ? "input-error" : ""}
 						/>
 						{errors?.name && (
@@ -80,7 +45,7 @@ export default function Register() {
 							type="email"
 							name="email"
 							value={form.email}
-							onChange={onInputChange}
+							onChange={handleInputChange}
 							className={errors?.email ? "input-error" : ""}
 						/>
 						{errors?.email && (
@@ -90,7 +55,7 @@ export default function Register() {
 
 					<div className="field">
 						<label>Role</label>
-						<select required name="role" onChange={onInputChange}>
+						<select required name="role" onChange={handleInputChange}>
 							<option value="student">Student</option>
 							<option value="instructor">Instructor</option>
 						</select>
@@ -106,7 +71,7 @@ export default function Register() {
 							type="password"
 							name="password"
 							value={form.password}
-							onChange={onInputChange}
+							onChange={handleInputChange}
 							className={errors?.password ? "input-error" : ""}
 						/>
 						{errors?.password && (
@@ -120,7 +85,7 @@ export default function Register() {
 							type="password"
 							name="confirmPassword"
 							value={form.confirmPassword}
-							onChange={onInputChange}
+							onChange={handleInputChange}
 							className={errors?.confirmPassword ? "input-error" : ""}
 						/>
 						{errors?.confirmPassword && (

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://localhost:8000/api/";
 
 const apiClient = axios.create({
 	baseURL: BASE_URL,
@@ -16,54 +16,64 @@ apiClient.interceptors.request.use((config) => {
 	return config;
 });
 
-export type APIResponse<ResponseType> = {
+type SuccessResponseType<ResponseType> = {
 	message: string;
 	status: boolean;
-	data: ResponseType;
+	data: ResponseType | null;
+	type: "success_response";
 };
 
-export type APIErrorType = {
+type ErrorResponseType = {
 	message: string;
 	status: boolean;
 	errors: unknown;
+	type: "error_response";
 };
 
-export class APIError extends Error {
-	constructor(message: string, status: boolean, errors: unknown) {
-		super(message);
-		this.status = status;
-		this.errors = errors;
-	}
-	status;
-	errors;
+type APIMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export function isSuccessResponse<T>(
+	response: unknown,
+): response is SuccessResponseType<T> {
+	return (response as SuccessResponseType<T>).type === "success_response";
+}
+
+export function isFailedResponse(
+	response: unknown,
+): response is ErrorResponseType {
+	return (response as ErrorResponseType).type === "error_response";
 }
 
 /**
- * Generic API request function
- * @param path destination URL to send this request to
- * @param param1
+ * Generic api fetching hook
+ * @param path api request destination
+ * @param method GET | POST | PUT | PATCH | DELETE
+ * @param body data to be sent
  * @returns
  */
-export default async function apiRequest<RequestType, ResponseType = null>(
+export default async function apiRequest<T>(
 	path: string,
-	method = "GET",
-	body: RequestType | null = null,
+	method: APIMethods = "GET",
+	body: unknown | null = null,
 ) {
 	try {
-		const response = await apiClient.request<APIResponse<ResponseType>>({
+		const response = await apiClient.request<SuccessResponseType<T>>({
 			url: path,
 			method,
 			data: body,
 		});
 		return response.data;
 	} catch (error) {
-		if (axios.isAxiosError<APIErrorType>(error)) {
-			const ed = error.response?.data;
-			throw new APIError(
-				ed?.message ?? "Something went wrong",
-				ed?.status ?? false,
-				ed?.errors,
-			);
+		if (axios.isAxiosError<ErrorResponseType>(error)) {
+			if (error.response) {
+				throw error.response.data;
+			} else {
+				throw {
+					message: "Unknown problem has occured",
+					status: false,
+					errors: error.toJSON(),
+				} as ErrorResponseType;
+			}
 		}
 	}
 }
