@@ -7,7 +7,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<BrowserRouter basename="/lms-dibiedu/">
+		<BrowserRouter basename="/lms-dibiedu">
 			<AuthProvider>
 				<App />
 			</AuthProvider>

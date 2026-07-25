@@ -4,9 +4,9 @@ const routePaths = {
 	register: "/register",
 	dashboard: "/dashboard",
 	courses: "courses",
-	courseDetail: "/course/:id",
+	courseDetail: "course/:id",
 	users: "users",
-	userDetail: "/user/:id",
+	userDetail: "user/:id",
 } as const;
 
 export default routePaths;
