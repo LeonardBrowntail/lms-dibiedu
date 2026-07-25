@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import dibilogo from "../assets/icons/dibilogo.svg";
-import LoginCard from "./LoginCard";
+import NavbarButton from "./atoms/NavbarButton";
+import NavbarModal from "./molecules/NavbarModal";
+import useClickOutside from "../hooks/useClickOutside";
 
 export default function Navbar({
 	hidden,
@@ -14,22 +15,26 @@ export default function Navbar({
 	navLinks?: { title: string; path: string }[] | undefined;
 }) {
 	const navigate = useNavigate();
-	const { authenticated, logout } = useAuth();
-	const [showLogin, setLogin] = useState(false);
+	const [showModal, setModal] = useState(false);
+	const modalRef = useRef<HTMLDivElement>(null);
+	useClickOutside(modalRef, onClickOutsideModal);
+
+	function onClickOutsideModal() {
+		if (showModal) setModal(false);
+	}
 
 	function onLogoClick() {
 		return navigate("/");
 	}
 
-	function handleAuthButton() {
-		if (authenticated) return logout();
-		return setLogin(true);
+	function handleNavbarButton() {
+		if (!showModal) return setModal(true);
 	}
 
 	if (hidden) return <></>;
 
 	return (
-		<header className="sticky top-0">
+		<header className="fixed top-0 w-full">
 			<nav className="bg-header px-10 py-3 flex justify-between items-center">
 				<div className="flex gap-2">
 					<div
@@ -59,20 +64,18 @@ export default function Navbar({
 							);
 						})}
 					</ul>
-					<button
-						onClick={handleAuthButton}
-						className={
-							"button " + (authenticated ? "bg-button-red" : "bg-button")
-						}
-					>
-						<p>{authenticated ? "Logout" : "Login"}</p>
-					</button>
+					<NavbarButton onClick={handleNavbarButton} />
 				</div>
 			</nav>
-			{/* login card container*/}
-			{!authenticated && showLogin && (
+			{/* modal */}
+			{showModal && (
 				<div className="flex justify-end">
-					<LoginCard />
+					<div
+						ref={modalRef}
+						className="flex flex-col gap-5 px-10 py-5 bg-header rounded-bl-2xl"
+					>
+						<NavbarModal />
+					</div>
 				</div>
 			)}
 		</header>

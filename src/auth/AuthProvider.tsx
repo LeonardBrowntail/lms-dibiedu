@@ -7,6 +7,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 	const [loading, setLoading] = useState(true);
 
 	function getLocalData() {
+		setLoading(true);
 		const localUser = localStorage.getItem("user");
 		const localToken = localStorage.getItem("token");
 

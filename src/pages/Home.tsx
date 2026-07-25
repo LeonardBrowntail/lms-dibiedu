@@ -5,10 +5,11 @@ import { PiCertificate } from "react-icons/pi";
 import img1 from "../assets/img/featured1.png";
 import img2 from "../assets/img/featured2.png";
 import img3 from "../assets/img/featured3.png";
+import FeatureCard from "../components/FeatureCard";
 
 export default function Home() {
 	const navbar = [
-		{ title: "Home", path: "#home" },
+		{ title: "Home", path: "#" },
 		{ title: "Why Us", path: "#why-us" },
 		{ title: "Featured Courses", path: "#featured" },
 	];
@@ -52,7 +53,7 @@ export default function Home() {
 	return (
 		<>
 			<Navbar navLinks={navbar} />
-			<div>
+			<div className="pt-16">
 				<main className="p-4 text-whitish-text">
 					<figure
 						className={
@@ -69,7 +70,7 @@ export default function Home() {
 								anywhere.
 							</p>
 						</div>
-						<button className="button bg-button">Start Learning</button>
+						<button className="bg-button button">Start Learning</button>
 					</figure>
 				</main>
 				<section className="px-4 py-10 flex flex-col gap-10">
@@ -86,7 +87,7 @@ export default function Home() {
 							succeed.
 						</p>
 					</div>
-					<div className="flex gap-3 overflow-x-scroll md:overflow-visible">
+					<div className="flex gap-3 overflow-x-scroll md:grid md:grid-cols-3 md:overflow-visible">
 						{reasons.map((reason, index) => {
 							return (
 								<ReasonCard
@@ -99,35 +100,29 @@ export default function Home() {
 						})}
 					</div>
 				</section>
-				<section className="p-4">
+				<section className="p-4 w-full">
 					<h2 id="featured" className="pt-5 pb-3 font-bold text-[22px]">
 						Featured Courses
 					</h2>
-					<div className="flex gap-3 overflow-scroll md:overflow-visible">
+					<div className="flex gap-3 overflow-x-scroll md:grid md:grid-cols-3 md:overflow-visible">
 						{featured.map((feature, index) => {
 							return (
-								<figure
+								<FeatureCard
 									key={index}
-									className="min-w-75 pb-3 flex flex-col gap-3"
-								>
-									<img
-										src={feature.img}
-										alt="Picture with clouds and a tree"
-										className="h-42 object-cover rounded-lg"
-									/>
-									<figcaption>
-										<p className="font-bold">{feature.title}</p>
-										<p className="text-sm">{feature.desc}</p>
-									</figcaption>
-								</figure>
+									img={feature.img}
+									title={feature.title}
+									desc={feature.desc}
+									alt=""
+								/>
 							);
 						})}
 					</div>
 				</section>
 				<div className="px-4 py-3 flex justify-center items-center">
-					<button className="button bg-button">Learn More</button>
+					<button className="button bg-button">View All Courses</button>
 				</div>
 			</div>
+			<footer className=""></footer>
 		</>
 	);
 }

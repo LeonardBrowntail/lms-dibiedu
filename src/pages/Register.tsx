@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import useRegisterSetup from "../hooks/useRegisterSetup";
 import useApiPost from "../hooks/useApiPost";
+import AuthLayout from "../components/AuthLayout";
+import FormInput from "../components/atoms/FormInput";
+import routePaths from "../routePaths";
+import FormSelection from "../components/atoms/FormSelections";
 
 export default function Register() {
 	const { form, errors, serverError, submitting, setForm, submit } =
@@ -18,90 +22,71 @@ export default function Register() {
 	}
 
 	return (
-		<div className="form-page">
-			<div className="flex">
-				<h2>Daftar Akun</h2>
+		<AuthLayout>
+			<div className="flex flex-col gap-5">
+				<h2 className="text-center text-xl">Registration</h2>
 
 				{serverError && <div className="alert-error">{serverError}</div>}
 
-				<form onSubmit={submit} noValidate>
-					<div className="field">
-						<label>Nama</label>
-						<input
-							type="text"
-							name="name"
-							value={form.name}
-							onChange={handleInputChange}
-							className={errors?.name ? "input-error" : ""}
-						/>
-						{errors?.name && (
-							<small className="error-text">{errors.name}</small>
-						)}
-					</div>
+				<form className="flex flex-col gap-5" onSubmit={submit} noValidate>
+					<FormInput
+						type="text"
+						label="Name"
+						name="name"
+						value={form.name}
+						handleChange={handleInputChange}
+						disabled={submitting}
+						error={errors?.name}
+					/>
 
-					<div className="field">
-						<label>Email</label>
-						<input
-							type="email"
-							name="email"
-							value={form.email}
-							onChange={handleInputChange}
-							className={errors?.email ? "input-error" : ""}
-						/>
-						{errors?.email && (
-							<small className="error-text">{errors.email}</small>
-						)}
-					</div>
+					<FormInput
+						type="email"
+						label="Email"
+						name="email"
+						value={form.email}
+						handleChange={handleInputChange}
+						disabled={submitting}
+						error={errors?.email}
+					/>
 
-					<div className="field">
-						<label>Role</label>
-						<select required name="role" onChange={handleInputChange}>
-							<option value="student">Student</option>
-							<option value="instructor">Instructor</option>
-						</select>
+					<FormInput
+						type="password"
+						label="Password"
+						name="password"
+						handleChange={handleInputChange}
+						value={form.password}
+						disabled={submitting}
+						error={errors?.password}
+					/>
 
-						{errors?.email && (
-							<small className="error-text">{errors.email}</small>
-						)}
-					</div>
+					<FormInput
+						type="password"
+						name="confirmPassword"
+						label="Confirm Password"
+						handleChange={handleInputChange}
+						value={form.confirmPassword}
+						disabled={submitting}
+						error={errors?.confirmPassword}
+					/>
 
-					<div className="field">
-						<label>Password</label>
-						<input
-							type="password"
-							name="password"
-							value={form.password}
-							onChange={handleInputChange}
-							className={errors?.password ? "input-error" : ""}
-						/>
-						{errors?.password && (
-							<small className="error-text">{errors.password}</small>
-						)}
-					</div>
+					<FormSelection error={errors?.role} onChange={handleInputChange} />
 
-					<div className="field">
-						<label>Konfirmasi Password</label>
-						<input
-							type="password"
-							name="confirmPassword"
-							value={form.confirmPassword}
-							onChange={handleInputChange}
-							className={errors?.confirmPassword ? "input-error" : ""}
-						/>
-						{errors?.confirmPassword && (
-							<small className="error-text">{errors.confirmPassword}</small>
-						)}
-					</div>
-
-					<button type="submit" disabled={submitting} className="btn-primary">
-						{submitting ? "Memproses..." : "Daftar"}
+					<button
+						type="submit"
+						disabled={submitting}
+						className={`button ${submitting ? "bg-gray-500" : "bg-button"}`}
+					>
+						{submitting ? "Submitting..." : "Register"}
 					</button>
 				</form>
 
-				<p className="form-footer">
-					Sudah punya akun? <Link to="/login">Login di sini</Link>
+				<p>
+					Already have an account?{" "}
+					<Link to={routePaths.login} className="text-button">
+						Login
+					</Link>
 				</p>
 			</div>
-		</div>
+		</AuthLayout>
 	);
 }

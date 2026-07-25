@@ -1,3 +1,10 @@
+import AuthLayout from "../components/AuthLayout";
+import LoginCard from "../components/LoginCard";
+
 export default function Login() {
-	return <div className="form-page"></div>;
+	return (
+		<AuthLayout>
+			<LoginCard />
+		</AuthLayout>
+	);
 }

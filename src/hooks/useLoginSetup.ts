@@ -9,8 +9,8 @@ type LoginFormType = {
 };
 
 type LoginFormErrorType = {
-	email: string | null;
-	password: string | null;
+	email?: string;
+	password?: string;
 };
 
 export default function useLoginSetup() {
@@ -25,27 +25,22 @@ export default function useLoginSetup() {
 	};
 
 	function validate(form: LoginFormType) {
-		const errors: LoginFormErrorType = {
-			email: null,
-			password: null,
-		};
+		const errors: LoginFormErrorType = {};
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 		// check email
 		if (!form.email.trim()) {
-			errors.email = "Email wajib diisi";
+			errors.email = "Email is required";
 		} else if (!emailRegex.test(form.email)) {
-			errors.email = "Format email tidak valid";
+			errors.email = "Email format is invalid";
 		}
 
 		// check password
 		if (!form.password) {
-			errors.password = "Password wajib diisi";
+			errors.password = "Password is required";
 		}
 
-		return Object.values(errors).every((error) => error === null)
-			? errors
-			: null;
+		return errors;
 	}
 
 	function onSuccess(response: APILoginResponseType) {

@@ -14,19 +14,22 @@ export default function useApiPost<
 }: {
 	target: string;
 	init: FormType;
-	validate: (form: FormType) => FormErrorType | null;
+	validate: (form: FormType) => FormErrorType;
 	onSuccess: (response: ExpectedResponseType) => unknown;
 	onFail: () => unknown;
 }) {
 	const [form, setForm] = useState<FormType>(init);
-	const [errors, setErrors] = useState<FormErrorType | null>(null);
+	const [errors, setErrors] = useState<FormErrorType>({} as FormErrorType);
 	const [serverError, setServerError] = useState("");
 	const [submitting, setSubmitting] = useState(false);
 
-	async function submit() {
+	async function submit(event: React.SubmitEvent<HTMLFormElement>) {
+		event.preventDefault();
 		setServerError("");
-		setErrors(validate(form));
-		if (errors) return;
+		const validated = validate(form);
+		setErrors(validated);
+		console.warn(errors);
+		if (validated) return;
 
 		setSubmitting(true);
 		try {

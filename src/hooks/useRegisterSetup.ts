@@ -11,11 +11,11 @@ type RegisterFormType = {
 };
 
 type RegisterFormError = {
-	name: string | null;
-	email: string | null;
-	role: string | null;
-	password: string | null;
-	confirmPassword: string | null;
+	name?: string;
+	email?: string;
+	role?: string;
+	password?: string;
+	confirmPassword?: string;
 };
 
 export default function useRegisterSetup() {
@@ -31,13 +31,7 @@ export default function useRegisterSetup() {
 	};
 
 	function validate(form: RegisterFormType) {
-		const errors: RegisterFormError = {
-			name: null,
-			email: null,
-			role: null,
-			password: null,
-			confirmPassword: null,
-		};
+		const errors: RegisterFormError = {};
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 		// check name
@@ -59,21 +53,22 @@ export default function useRegisterSetup() {
 			errors.password = "Password length must be at least 6 characters long";
 		}
 
+		// check password confirmation
+		if (!form.confirmPassword) {
+			errors.confirmPassword = "Password confirmation is required";
+		}
+		if (form.password !== form.confirmPassword) {
+			errors.confirmPassword = "Password is not the same";
+		}
+
 		// check role
 		if (!form.role) {
 			errors.role = "Role wajib diisi";
 		} else if (!Object.values(Roles).includes(form.role)) {
-			errors.role = `Role tidak termasuk dalam list role yang diperbolehkan`;
+			errors.role = `Role is not within allowed assignable roles`;
 		}
 
-		// check password confirmation
-		if (form.password !== form.confirmPassword) {
-			errors.confirmPassword = "Konfirmasi password tidak cocok";
-		}
-
-		return Object.values(errors).every((error) => error === null)
-			? errors
-			: null;
+		return errors;
 	}
 
 	function onSuccess() {
