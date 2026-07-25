@@ -1,11 +1,3 @@
-# Build the Vite project and deploy it to GitHub Pages.
-# Repo: LeonardBrowntail/day45-assignment-app  →  https://leonardbrowntail.github.io/day45-assignment-app/
-#
-# One-time repo setup (Settings → Pages):
-#   "Build and deployment" → Source: **GitHub Actions**
-#
-# Relies on vite.config.js keeping:
-#   base: "/day45-assignment-app/"   # must match the repo name / Pages URL
 name: Deploy to GitHub Pages
 
 on:

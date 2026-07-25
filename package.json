@@ -1,5 +1,5 @@
 {
-	"name": "dibimbing-miniproject-app",
+	"name": "lms-dibiedu",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
@@ -9,7 +9,7 @@
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview",
-		"deploy": "vite build && gh-pages -d dist"
+		"deploy": "vite build && gh-pages -d dist "
 	},
 	"dependencies": {
 		"@tailwindcss/vite": "^4.3.2",
